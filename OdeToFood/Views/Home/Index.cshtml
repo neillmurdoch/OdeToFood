@@ -1,0 +1,32 @@
+﻿<!-- Add a directive to tell Razor which model to use-->
+@using Microsoft.Azure.KeyVault.Models
+@model OdeToFood.ViewModels.HomeIndexViewModel
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+@*<h1>@Model.Name</h1>        <!-- @Model wouldn't have intellisense without the directive above-->*@
+@*<div>The ID value is @Model.Id</div>*@
+    <h1>@Model.CurrentMessage</h1>
+<table>
+    @foreach (var restaurant in Model.Restaurants)
+    {
+        <tr>
+            <td>@restaurant.Id</td>
+            <td>@restaurant.Name</td>
+            <td>
+                @*<a href="/home/details/@restaurant.Id">Details</a>*@
+                @*ActionLink is more robust as it consults the routing tables, rather than hard coding the url as above*@
+                @*@Html.ActionLink("Go", "Details", new { id=restaurant.Id })*@
+                @*ASP.NET 4 feature...TagHelpers. See _ViewImports.cshtml which is an "MVC View Imports Page" in the View folder*@
+                @*Id parameters is added by adding -id to the end of asp-route*@
+                <a asp-action="Details" asp-route-id=@restaurant.Id>More</a>
+            </td>
+        </tr>
+    }
+</table>
+<a asp-action="Create">Add Restaurant</a>
+</body>
+</html>
