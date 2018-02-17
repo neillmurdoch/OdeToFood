@@ -90,19 +90,33 @@ namespace OdeToFood.Controllers
         }
 
         [HttpPost]
+        // This is VERY important for web apps using POSTs
+        [ValidateAntiForgeryToken]
         public IActionResult Create(RestaurantEditModel model)
         {
-            var newRestaurant = new Restaurant();
-            newRestaurant.Name = model.Name;
-            newRestaurant.Cuisine = model.Cuisine;
+            // ModelState allows you to interrogate what happens with the model binding process
+            if (ModelState.IsValid)
+            {
 
-            newRestaurant = _restaurantData.Add(newRestaurant);
+                var newRestaurant = new Restaurant
+                {
+                    Name = model.Name,
+                    Cuisine = model.Cuisine
+                };
 
-            // Don't return a view as this could return another POST screen. If the user refreshes, it could POST again...BAD!
-            //return View("Details", newRestaurant);
+                newRestaurant = _restaurantData.Add(newRestaurant);
 
-            // Instead, redirect using a GET request
-            return RedirectToAction(nameof(Details), new {id = newRestaurant.Id});
+                // Don't return a view as this could return another POST screen. If the user refreshes, it could POST again...BAD!
+                //return View("Details", newRestaurant);
+
+                // Instead, redirect using a GET request
+                return RedirectToAction(nameof(Details), new {id = newRestaurant.Id});
+            }
+            else
+            {
+                // User submitted data that didn't pass validation rules
+                return View();
+            }
         }
     }
 }

@@ -1,20 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using OdeToFood.Data;
 using OdeToFood.Services;
 
 namespace OdeToFood
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
+        // Add a constructor to inject some config information
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -23,7 +29,13 @@ namespace OdeToFood
             // Scope to entirity of http request
             //services.AddScoped<IRestaurantData, InMemoryRestaurantData>();
             // One list...NOT a good idea when multi user, but ok for test
-            services.AddSingleton<IRestaurantData, InMemoryRestaurantData>();
+            //services.AddSingleton<IRestaurantData, InMemoryRestaurantData>();
+
+            // Bring in the entity framework services that we need. Connection string comes from appsettings.json
+            services.AddDbContext<OdeToFoodDBContext>(options => options.UseSqlServer(_configuration.GetConnectionString("OdeToFood")));
+
+            // Now we are talking to a database.
+            services.AddScoped<IRestaurantData, SqlRestaurantData>();
 
             services.AddMvc();
         }
