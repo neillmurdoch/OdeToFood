@@ -1,10 +1,14 @@
-﻿@model OdeToFood.Models.Restaurant
+﻿@model Restaurant
 
 @*Try to avoid ifs in views. Should be in controller.
 @if (Model == null)
 {
     <div>Not found or something</div>
 }*@
+
+@{
+    ViewBag.Title = Model.Name;
+}
 
 <h1>@Model.Name</h1>
 

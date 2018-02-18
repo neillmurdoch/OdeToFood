@@ -1,0 +1,13 @@
+﻿@* Require a name part on the url which will be a parameter passed to the OnGet method of the code behind model *@
+
+@page "{name}"
+@*Use a service, as set up in Startup.cs
+      It is not recommended to save this in a property like this. You end up doing to many things in your Razor page.
+    @inject IGreeter Greeter*@
+
+@*Use a model instead...model for a page is different than model used for MVC controllers
+    In a Razor page, the model is the code behind class for the Page cshtml file Greeting.cshtml.cs*@
+@model GreetingModel
+
+@*<div>@DateTime.Now.Year</div>*@
+<div>@Model.CurrentGreeting</div>
