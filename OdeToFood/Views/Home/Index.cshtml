@@ -1,16 +1,27 @@
 ﻿<!-- Add a directive to tell Razor which model to use-->
 @using Microsoft.Azure.KeyVault.Models
-@model OdeToFood.ViewModels.HomeIndexViewModel
+@*Namespaces can also be defined in _ViewImports.cshtml to hierarchically set usings for all views or folder specific views*@
+@model HomeIndexViewModel
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+@{
+    ViewBag.Title = "Home page";
+    //To explicitly set the layout to use for a page, set it like this
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 @*<h1>@Model.Name</h1>        <!-- @Model wouldn't have intellisense without the directive above-->*@
 @*<div>The ID value is @Model.Id</div>*@
-    <h1>@Model.CurrentMessage</h1>
-<table>
+<h1>All Restaurants</h1>
+
+
+@foreach (var restaurant in Model.Restaurants)
+{
+    @*Use a partial view to render each restaurant.*@
+    @Html.Partial("_Summary", restaurant)
+}
+
+
+@*<table>
     @foreach (var restaurant in Model.Restaurants)
     {
         <tr>
@@ -18,15 +29,15 @@
             <td>@restaurant.Name</td>
             <td>
                 @*<a href="/home/details/@restaurant.Id">Details</a>*@
-                @*ActionLink is more robust as it consults the routing tables, rather than hard coding the url as above*@
-                @*@Html.ActionLink("Go", "Details", new { id=restaurant.Id })*@
-                @*ASP.NET 4 feature...TagHelpers. See _ViewImports.cshtml which is an "MVC View Imports Page" in the View folder*@
-                @*Id parameters is added by adding -id to the end of asp-route*@
-                <a asp-action="Details" asp-route-id=@restaurant.Id>More</a>
-            </td>
-        </tr>
-    }
-</table>
-<a asp-action="Create">Add Restaurant</a>
-</body>
-</html>
+@*ActionLink is more robust as it consults the routing tables, rather than hard coding the url as above*@
+@*@Html.ActionLink("Go", "Details", new { id=restaurant.Id })*@
+@*ASP.NET 4 feature...TagHelpers. See _ViewImports.cshtml which is an "MVC View Imports Page" in the View folder*@
+@*Id parameters is added by adding -id to the end of asp-route*@
+@*    <a asp-action="Details" asp-route-id=@restaurant.Id>More</a>
+                    <a asp-page="/Restaurants/Edit" asp-route-id="@restaurant.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </table>*@
+    <div><a asp-action="Create">Add Restaurant</a></div>
+

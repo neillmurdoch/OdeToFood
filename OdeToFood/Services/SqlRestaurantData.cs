@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using OdeToFood.Data;
 using OdeToFood.Models;
 
@@ -30,6 +31,14 @@ namespace OdeToFood.Services
             _context.Restaurants.Add(restaurant);
             _context.SaveChanges();
 
+            return restaurant;
+        }
+
+        public Restaurant Update(Restaurant restaurant)
+        {
+            // Tell the Entity Framework that this is a restaurant that you already know about but are updating
+            _context.Attach(restaurant).State = EntityState.Modified;
+            _context.SaveChanges();
             return restaurant;
         }
     }
